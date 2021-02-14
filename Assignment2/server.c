@@ -13,7 +13,7 @@
 #include <fcntl.h>
 #include "message.h"
 
-#define MAX_MEMBERS 3        //total clients that can be handled
+#define MAX_MEMBERS 5        //total clients that can be handled
 // #define MAX_GROUPS_NUM 10           //max number of groups that can be created in the server
 // #define MAX_GROUP_SIZE 100          //number of members in a group
 #define MAILBOX_SIZE 1000               //size of message queue
@@ -29,6 +29,8 @@ int socket_fd = 0;
 // int connection_fd = 0;
 
 
+
+
 pthread_mutex_t memberRegistrationMutex;
 pthread_t clientHandlerThreads[MAX_MEMBERS];
 
@@ -40,7 +42,13 @@ void *clientHandler(void *sock_fd);
 void printMembers(void);
 
 
+message not_found;
+
+
+
 int main(int argc, char **argv){ 
+
+    
 
     if(argc == 1){
         printf("Please supply a port number.\nExiting....\n");
@@ -86,6 +94,9 @@ int main(int argc, char **argv){
     len = sizeof(cli); 
     // Accept the data packet from client and verification 
 
+    strcpy(not_found.sender, "server");
+    
+
     while(1){
         int *connection_fd = malloc(sizeof(int));
         *connection_fd = accept(socket_fd, (struct sockaddr*)&cli, &len); 
@@ -120,7 +131,6 @@ void *clientHandler(void *socket_fd){
         message recvMessage;
         while(recv(client_fd, &recvMessage,sizeof(recvMessage),0)) {
         // recv(connection_fd, recvBuffer, MAXLENGTH, 0);
-            printf("%s", recvMessage.message);
             if(recvMessage.message_type){
                 for(int j=0;j<memberCount;j++){
                     if(strcmp(members[j], recvMessage.sender) != 0){
@@ -130,10 +140,22 @@ void *clientHandler(void *socket_fd){
             }
             else
             {
+                int flag = 0;
+                int from;
                 for(int j=0;j<memberCount;j++){
                     if(strcmp(members[j], recvMessage.receiver) == 0){
                         send(members_socks[j], &recvMessage, sizeof(recvMessage),0); 
+                        flag = 1;
                     }
+                    if(strcmp(members[j], recvMessage.sender) == 0){
+                        from = members_socks[j];
+                    }
+                }
+                if(!flag)
+                {
+                    strcpy(not_found.message, "User not found\n");
+                    send(from, &not_found, sizeof(not_found), 0);
+                    printf("No user registered with name %s\n", recvMessage.receiver);
                 }
             }
         }
