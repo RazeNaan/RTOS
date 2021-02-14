@@ -75,7 +75,7 @@ int main(int argc, char **argv){
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
     servaddr.sin_port = htons(atoi(portno)); 
   
-    // Binding newly created socket to given IP and verification 
+    // Bindin newly created socket to given IP and verification 
     if ((bind(socket_fd, (struct sockaddr*)&servaddr, sizeof(servaddr))) != 0) { 
         printf("Socket binding Failed\n"); 
         exit(0); 
