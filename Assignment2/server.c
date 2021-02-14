@@ -120,10 +120,20 @@ void *clientHandler(void *socket_fd){
         message recvMessage;
         while(recv(client_fd, &recvMessage,sizeof(recvMessage),0)) {
         // recv(connection_fd, recvBuffer, MAXLENGTH, 0);
-        
-            for(int j=0;j<memberCount;j++){
-                if(strcmp(members[j], recvMessage.sender) != 0){
-                    send(members_socks[j], &recvMessage, sizeof(recvMessage),0); 
+            printf("%s", recvMessage.message);
+            if(recvMessage.message_type){
+                for(int j=0;j<memberCount;j++){
+                    if(strcmp(members[j], recvMessage.sender) != 0){
+                        send(members_socks[j], &recvMessage, sizeof(recvMessage),0); 
+                    }
+                }
+            }
+            else
+            {
+                for(int j=0;j<memberCount;j++){
+                    if(strcmp(members[j], recvMessage.receiver) == 0){
+                        send(members_socks[j], &recvMessage, sizeof(recvMessage),0); 
+                    }
                 }
             }
         }

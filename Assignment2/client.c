@@ -85,10 +85,23 @@ int main(int argc, char *argv[])
     pthread_create(&read_thread, NULL, recvMsg, NULL);
     for (;;)
     {
+        char type[20];
+        char to[20];
         printf("Your Message: ");
+        // scanf("", )
         fgets(myMessage.message, sizeof(myMessage.message), stdin);
-        // printf("To: ");
-        // fgets(myMessage.receiver, sizeof(myMessage.receiver), stdin);
+        printf("Type: ");
+        // scanf("%d", &myMessage.message_type);
+        fgets(type, sizeof(type), stdin);
+        myMessage.message_type = atoi(type);
+        if(atoi(type) == 0)
+        {
+            printf("To: ");
+            fgets(to, sizeof(to), stdin);
+            to[strcspn(to, "\n")] = 0;
+            strcpy(myMessage.receiver, to);
+
+        }
         send(socket_fd, &myMessage, sizeof(myMessage), 0);
     }
 

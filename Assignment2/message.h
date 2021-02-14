@@ -4,7 +4,7 @@
 typedef struct Message {
     int message_type ; //GROUPMESSAGE, USERMESSAGE
     char sender[20];
-    char receiver[20];
+    char receiver[100];
     char message[100];
 } message;
 
