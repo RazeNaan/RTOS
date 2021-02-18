@@ -19,7 +19,7 @@ void sendMsg(int serv_sock)
 {
     int stat;
     memset(sendBuffer, 0, sizeof(sendBuffer));
-    printf("Your Message : ");
+    printf("\t \t Enter Message : \n \t \t ");
     // gets(sendBuffer);
     fgets(sendBuffer, MAXLENGTH , stdin);
     sendBuffer[strlen(sendBuffer) - 1] = '\0';
@@ -34,7 +34,7 @@ void recvMsg(int serv_sock)
     int msg;
     memset(recvBuffer, 0, sizeof(recvBuffer));
     msg = recv(serv_sock, recvBuffer, MAXLENGTH, 0);
-    printf("Response from server : %s\n" ,recvBuffer);
+    printf("Server : \n%s\n" ,recvBuffer);
 }
 
 

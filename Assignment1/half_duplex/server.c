@@ -21,7 +21,7 @@ void sendMsg(int serv_sock)
 {
     int stat;
     memset(sendBuffer, 0, sizeof(sendBuffer));
-    printf("Enter Message : ");
+    printf("\t \t Enter Message : \n \t \t ");
     fgets(sendBuffer, MAXLENGTH , stdin);
     sendBuffer[strlen(sendBuffer) - 1] = '\0';
     stat = send(serv_sock, sendBuffer, strlen(sendBuffer), 0);
@@ -34,7 +34,7 @@ void recvMsg(int serv_sock){
     int msg;
     memset(recvBuffer, 0, sizeof(recvBuffer));
     msg = recv(serv_sock, recvBuffer, MAXLENGTH, 0);
-    printf("Response from client: %s\n",recvBuffer);
+    printf("Client: \n%s\n",recvBuffer);
 }
 
 // Function designed for chat between client and server. 

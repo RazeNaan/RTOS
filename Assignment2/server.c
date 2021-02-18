@@ -155,7 +155,7 @@ void *clientHandler(void *socket_fd){
                 {
                     strcpy(not_found.message, "User not found\n");
                     send(from, &not_found, sizeof(not_found), 0);
-                    printf("No user registered with name %s\n", recvMessage.receiver);
+                    // printf("No user registered with name %s\n", recvMessage.receiver);
                 }
             }
         }
